@@ -9,14 +9,11 @@ class StudentMiddleware
             session_start();
         }
 
-        // Unique access condition: must have visited /student first
-        if (!isset($_SESSION['student_access']) || $_SESSION['student_access'] !== true) {
-            // Not authorized — send back to student home with a message
-            $_SESSION['access_denied_msg'] = 'Access denied: please visit the Student Home page first before viewing the profile.';
-            redirect('student');
-            return;
+        if (isset($_SESSION['student_access']) && $_SESSION['student_access'] === true) {
+            return $next();
         }
 
-        return $next();
+        redirect('student');
     }
+
 }
